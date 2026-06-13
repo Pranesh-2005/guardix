@@ -4,10 +4,10 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "promptgaurd"
-version = "0.2.0"
+version = "0.2.3"
 description = "Universal LLM prompt guard against injection attacks across all providers"
 readme = "README.md"
-license = {text = "MIT"}
+license = "MIT"
 requires-python = ">=3.8"
 authors = [
     {name = "Pranesh", email = "praneshmadhan646@gmail.com"}
@@ -16,7 +16,6 @@ keywords = ["llm", "prompt", "injection", "security", "guard", "openai", "anthro
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",

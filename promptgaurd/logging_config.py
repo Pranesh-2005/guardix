@@ -43,7 +43,7 @@ class StructuredLogger:
         self.logger.setLevel(getattr(logging, level.upper(), logging.INFO))
         self.logger.propagate = False
         if console is None:
-            console = log_file is None  # file logging silences the console
+            console = log_file is None
         if log_file:
             path = Path(log_file)
             path.parent.mkdir(parents=True, exist_ok=True)
