@@ -8,7 +8,7 @@ OpenRouter, Together, Gemini's OpenAI-compat endpoint, etc. Pass
 """
 
 from typing import Any, Optional
-from .base import ProviderAdapter
+from .base import ProviderAdapter, is_guarded_role
 from ..core import Guardial
 from ..responses import openai_blocked_response
 
@@ -35,6 +35,8 @@ class OpenAIAdapter(ProviderAdapter):
         parts = []
         for msg in messages:
             if isinstance(msg, dict):
+                if not is_guarded_role(msg.get("role", "user")):
+                    continue
                 content = msg.get("content", "")
                 if isinstance(content, list):
                     for item in content:

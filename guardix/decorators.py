@@ -5,6 +5,7 @@ from typing import Any, Callable, Optional
 
 from .core import Guardial, Decision
 from .exceptions import GuardBlocked
+from .providers.base import is_guarded_role
 from .responses import (
     anthropic_blocked_response,
     gemini_blocked_response,
@@ -116,6 +117,8 @@ def _messages_to_prompt(messages: Any) -> str:
     parts = []
     for msg in messages:
         if isinstance(msg, dict):
+            if not is_guarded_role(msg.get("role", "user")):
+                continue
             content = msg.get("content", "")
             parts.append(content)
         else:

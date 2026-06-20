@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "guardix"
-version = "0.1.1"
+version = "1.0.0"
 description = "Universal LLM prompt guard against injection attacks across all providers"
 readme = "README.md"
 license = "MIT"

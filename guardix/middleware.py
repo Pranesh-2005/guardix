@@ -6,6 +6,7 @@ from functools import wraps
 from .core import Guardial, Decision
 from .exceptions import GuardBlocked
 from .responses import openai_blocked_response
+from .providers.base import is_guarded_role
 
 
 class LLMInterceptor:
@@ -85,9 +86,9 @@ class LLMInterceptor:
         parts = []
         for msg in messages:
             if isinstance(msg, dict):
-                role = msg.get("role", "unknown")
-                content = msg.get("content", "")
-                parts.append(f"[{role}] {content}")
+                if not is_guarded_role(msg.get("role", "user")):
+                    continue
+                parts.append(msg.get("content", ""))
             else:
                 parts.append(str(msg))
         return "\n".join(parts)

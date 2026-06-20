@@ -1,7 +1,7 @@
 """Anthropic provider adapter."""
 
 from typing import Any, Optional
-from .base import ProviderAdapter
+from .base import ProviderAdapter, is_guarded_role
 from ..core import Guardial
 from ..responses import anthropic_blocked_response
 
@@ -19,12 +19,13 @@ class AnthropicAdapter(ProviderAdapter):
 
     def _extract_prompt(self, *args: Any, **kwargs: Any) -> str:
         messages = kwargs.get("messages", [])
-        system = kwargs.get("system", "")
+        # The Anthropic ``system`` kwarg is a trusted developer prompt, not
+        # untrusted input — it is deliberately not scanned.
         parts = []
-        if system:
-            parts.append(system)
         for msg in messages:
             if isinstance(msg, dict):
+                if not is_guarded_role(msg.get("role", "user")):
+                    continue
                 content = msg.get("content", "")
                 if isinstance(content, list):
                     # Anthropic content blocks: [{"type": "text", "text": ...}, ...]

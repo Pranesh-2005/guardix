@@ -70,9 +70,9 @@ guard_client(genai.Client())                   # Gemini -> response.text
 ### 1. Decorator (simplest)
 
 ```python
-from guardix.decorators import Guardial_guard
+from guardix.decorators import guardial_guard
 
-@Guardial_guard(policy="strict")
+@guardial_guard(policy="strict")
 def chat(messages):
     import openai
     client = openai.OpenAI()
@@ -93,7 +93,7 @@ from guardix.providers import OpenAIAdapter
 import openai
 
 client = openai.OpenAI(api_key="...")
-guarded = OpenAIAdapter(client, Guardial=Guardial(policy="strict"))
+guarded = OpenAIAdapter(client, guardial=Guardial(policy="strict"))
 
 # Use exactly like the native client
 response = guarded.chat.completions.create(
@@ -109,7 +109,7 @@ from guardix.providers import AnthropicAdapter
 import anthropic
 
 client = anthropic.Anthropic(api_key="...")
-guarded = AnthropicAdapter(client, Guardial=Guardial(policy="strict"))
+guarded = AnthropicAdapter(client, guardial=Guardial(policy="strict"))
 
 response = guarded.messages.create(
     model="claude-3-opus-20240229",
@@ -124,7 +124,7 @@ from guardix.middleware import LLMInterceptor
 from guardix import Guardial
 
 client = openai.OpenAI()
-interceptor = LLMInterceptor(client, Guardial=Guardial(policy="strict"))
+interceptor = LLMInterceptor(client, guardial=Guardial(policy="strict"))
 
 # Intercept all chat.completions.create calls
 with interceptor:

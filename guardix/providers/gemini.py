@@ -10,7 +10,7 @@ case use ``OpenAIAdapter(client, provider_name="gemini")`` instead.
 """
 
 from typing import Any, Optional
-from .base import ProviderAdapter
+from .base import ProviderAdapter, is_guarded_role
 from ..core import Guardial
 from ..responses import gemini_blocked_response
 
@@ -35,11 +35,17 @@ def _contents_to_text(contents: Any) -> str:
     if isinstance(contents, str):
         return contents
     if isinstance(contents, dict):
+        # A turn with a trusted role (e.g. prior "model" output) is not scanned.
+        if "role" in contents and not is_guarded_role(contents["role"]):
+            return ""
         parts = contents.get("parts", [])
         return "\n".join(_contents_to_text(p) for p in parts)
     if isinstance(contents, (list, tuple)):
         return "\n".join(_contents_to_text(c) for c in contents)
-    # google-genai types (Content/Part objects) expose .text / .parts
+    # google-genai types (Content/Part objects) expose .role / .text / .parts
+    role = getattr(contents, "role", None)
+    if role is not None and not is_guarded_role(role):
+        return ""
     text = getattr(contents, "text", None)
     if isinstance(text, str):
         return text
